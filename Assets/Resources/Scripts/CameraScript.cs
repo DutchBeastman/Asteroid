@@ -1,0 +1,17 @@
+using UnityEngine;
+using System.Collections;
+
+public class CameraScript : MonoBehaviour {
+
+	public GameObject player;
+	public Vector3 offset;
+	
+	void Start()
+	{
+		offset = transform.position;	
+	}
+	void LateUpdate()
+	{
+		transform.position = player.transform.position + offset;
+	}
+}
