@@ -2,16 +2,46 @@ using UnityEngine;
 using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
-	public float Health;
+	
+	public int Health = 3;
 	public float thrusterSpeed;
 	public float rotationSpeed;
+	
+	public GUIText HealthCounter;
 	// Use this for initialization
 	void Start () {
-	
+		Health = 3;
+		HealthCounting();
+		
+			
+	}
+	void HealthCounting()
+	{
+		HealthCounter.text = "Health is: " + Health;	
+	}
+	void DamageMe()
+	{
+		
+		Health --;
+		HealthCounting();
+		if(Health == 0)
+		{
+			killed();	
+		}
+	}
+	void killed()
+	{
+		
+		
+			Destroy(gameObject, 2);	
+			Instantiate(Resources.Load("Prefab/Explosion"), transform.position, Quaternion.identity);
+		
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		
+		
 		
 		float z = Input.GetAxis("Vertical");
 		Vector3 movement = new Vector3(0,0,z);
@@ -25,19 +55,20 @@ public class PlayerScript : MonoBehaviour {
 		
 		if(transform.position.z >= 24)
 		{
-			transform.position = new Vector3(transform.position.x,0,-21);	
+			transform.position = new Vector3(transform.position.x,0,-22);	
 		}
-		if(transform.position.x >= 37)
+		else if(transform.position.z <= -22)
 		{
-			transform.position = new Vector3(-34,0,transform.position.z);	
+			transform.position = new Vector3(transform.position.x,0,24);	
 		}
-		if(transform.position.z <= -22)
+		 if(transform.position.x >= 39)
 		{
-			transform.position = new Vector3(transform.position.x,0,22);	
+			transform.position = new Vector3(-40,0,transform.position.z);	
 		}
-		if(transform.position.x <= -38)
+		
+		else if(transform.position.x <= -40)
 		{
-			transform.position = new Vector3(36,0,transform.position.z);	
+			transform.position = new Vector3(39,0,transform.position.z);	
 		}
 		
 		
@@ -45,4 +76,17 @@ public class PlayerScript : MonoBehaviour {
 		
 		
 	}
+	public void OnTriggerEnter(Collider col)
+		 { 
+		  // destroy the enemy
+		  if(col.name == "Meteoor(Clone)")
+		  { 
+			
+			Debug.Log ("Meteoor hit");	
+			Destroy(col.collider.gameObject,1.5f);
+			DamageMe();
+			Instantiate(Resources.Load("Prefab/Explosion"), transform.position, Quaternion.identity);
+		   
+		  }
+ 	}
 }

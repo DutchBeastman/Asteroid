@@ -4,6 +4,7 @@ using System.Collections;
 public class Meteoor : MonoBehaviour {
 	
 	
+	private float score = 0;
 	public float health = 15;
 	public float damage = 5;
 	private int randomNumb;
@@ -12,21 +13,36 @@ public class Meteoor : MonoBehaviour {
 	private bool number2 = false;
 	private bool number3 = false;
 	private bool number4 = false;
-	public float spawn;
-
+	public GUIText ScoreCounter;
+	
+	
+	void ScoreCounting()
+	{
+		ScoreCounter.text = "Score is: " + score;	
+	}
 	
 	public void DamageMe() {
 		health -= damage;
 		Debug.Log(health);
 		
 		
+		
 	}
-		void Start () {
-		spawn = 1;
+	public void RemoveMeteoor()
+	{
+		Destroy(gameObject, 1.5f);
+		Debug.Log("It be gauown");
+		score += 1;
+		Instantiate(Resources.Load("Prefab/Explosion"), transform.position, Quaternion.identity);
+	}
+	void Start () {
+		
+		score = 0;
+		ScoreCounting();
 		
 		randomNumb = Random.Range(0, 4);
 		randomNumb2 = Random.Range(0, 100);
-		Debug.Log(randomNumb2);
+		
 		if(randomNumb == 0)
 		{
 			transform.position = new Vector3(-25, 0.5f, (randomNumb2-50) * 0.15f);
@@ -49,18 +65,12 @@ public class Meteoor : MonoBehaviour {
 		}
 	}
 		void FixedUpdate () {
-		spawn -= 0.001f;
-		if(spawn <= 0)
-		{
-			GameObject newMeteoor = Instantiate(Resources.Load("Prefab/Meteoor"),transform.position, transform.rotation) as GameObject;
-			newMeteoor.transform.Translate(20,0,0);
-			spawn = 1;
-		}
-		
 		if(health <= 0)
 		{
-			Destroy(gameObject, 0f);
+			RemoveMeteoor();	
 		}
+		
+		
 	
 		if(number1)
 		{
@@ -69,7 +79,7 @@ public class Meteoor : MonoBehaviour {
 			{
 			transform.position = new Vector3(-35,0,0);
 			//Destroy(gameObject);
-			Debug.Log("ds1");
+			
 			}
 		}
 		if(number2)
@@ -79,7 +89,7 @@ public class Meteoor : MonoBehaviour {
 			{
 				
 			//Destroy(gameObject);
-			Debug.Log("ds2");
+			
 			}
 		}
 		if(number3)
@@ -88,7 +98,7 @@ public class Meteoor : MonoBehaviour {
 			if(transform.position.z > 35)
 			{
 			Destroy(gameObject);
-			Debug.Log("ds3");
+			
 			}
 		}
 		if(number4)
@@ -97,8 +107,11 @@ public class Meteoor : MonoBehaviour {
 			if(transform.position.z < -35)
 			{
 			Destroy(gameObject);
-			Debug.Log("ds4");
+			
 			}
-  }
+  		}
 	}
+	
+	
+
 }
